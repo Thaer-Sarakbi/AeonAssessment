@@ -6,9 +6,10 @@ type Props = {
 }
 
 export function Navigation({ colorScheme }: Props) {
+
   return (
     <NavigationContainer theme={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-     <RootNavigation />
+      <RootNavigation />
     </NavigationContainer>
   );
 }

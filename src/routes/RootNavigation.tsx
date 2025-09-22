@@ -11,6 +11,7 @@ const mainScreens = {
 }
 
 export function RootNavigation() {
+
   return (
     <Stack.Navigator screenOptions={{ headerShown: false }}>
       {createStackFromConfig(mainScreens, Stack)}

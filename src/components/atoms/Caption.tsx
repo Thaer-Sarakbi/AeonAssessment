@@ -12,7 +12,7 @@ interface CaptionProps extends TouchableOpacityProps {
     textRight?: string | React.ReactNode
 }
 
-const Caption = ({ text, color = COLORS.caption, fontSize = 12, align = 'left', numberOfLines, textLeft, textRight }: CaptionProps) => {
+const Caption = ({ text, color = COLORS.caption, fontSize = FONTSIZE.size_10, align = 'left', numberOfLines, textLeft, textRight }: CaptionProps) => {
     const displayText = text !== undefined && text !== null ? String(text) : '';
 
     let children = <Text style={[styles.text, { color, fontSize, textAlign: align}]} numberOfLines={numberOfLines}>{textLeft}{displayText}{textRight}</Text>;
@@ -21,7 +21,6 @@ const Caption = ({ text, color = COLORS.caption, fontSize = 12, align = 'left', 
 
 const styles = StyleSheet.create({
     text: {
-        fontSize: FONTSIZE.size_10,
         fontWeight: '500',
         flexShrink:1,
         flexWrap: 'wrap',
