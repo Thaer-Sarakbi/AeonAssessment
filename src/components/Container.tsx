@@ -2,6 +2,7 @@ import React from 'react'
 import { ColorValue, StatusBar, StatusBarStyle, StyleSheet, View, Dimensions, Platform, KeyboardAvoidingView, ScrollView } from 'react-native';
 import { Edges, SafeAreaView, SafeAreaViewProps } from 'react-native-safe-area-context';
 import { SPACING } from '../assets/theme';
+import Header from './atoms/Header';
 // import Header from './atom/headers/Header';
 // import { SPACING } from '../assets/theme';
 
@@ -43,23 +44,12 @@ interface ContainerProps extends SafeAreaViewProps {
  * @returns {*}
  */
 
-const Container = ({ children, style, headerMiddle, barStyle = "dark-content", barBackgroundColor = "transparent", allowBack = false, hasInput = false, backgroundColor = '#FFFFFF', edges, usingPaddingBottom = true, usingPaddingTop = true, headerBottomLine = false, barHidden = false, noPadding = false, FooterComponent, EnableRight}: ContainerProps) => {
+const Container = ({ children, style, barStyle = "dark-content", barBackgroundColor = "transparent", allowBack = false, hasInput = false, backgroundColor = '#FFFFFF', edges, usingPaddingBottom = true, usingPaddingTop = true, headerBottomLine = false, barHidden = false, noPadding = false, FooterComponent, EnableRight}: ContainerProps) => {
     return (
         <SafeAreaView style={[style, styles.container, { backgroundColor }]} edges={edges}>
             <StatusBar translucent backgroundColor={barBackgroundColor} barStyle={barStyle} hidden={barHidden} />
-            {/* <Header allowBack={allowBack} headerMiddle={headerMiddle} underline={headerBottomLine} EnableRight={EnableRight}/> */}
+            {allowBack && <Header/>}
 
-            {/* {hasInput ? (
-                <KeyboardAvoidingView style={[styles.wrapper,  (!usingPaddingBottom || FooterComponent) && {paddingBottom:0}, !usingPaddingTop && {paddingTop: 0}, { padding: noPadding ? 0 : SPACING.space_16 }]} enabled={hasInput} behavior={Platform.OS === 'ios' ? 'padding' : 'height'} keyboardVerticalOffset={Platform.OS === 'ios' ? statusBarHeight + SPACING.space_12 : 0} >
-                    <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.scrollView}>
-                        {children}
-                    </ScrollView>
-                </KeyboardAvoidingView>
-            ) : (
-                <View style={[styles.wrapper,  (!usingPaddingBottom || FooterComponent) && {paddingBottom:0}, !usingPaddingTop && {paddingTop: 0}, { padding: noPadding ? 0 : SPACING.space_16 }]}>
-                    {children}
-                </View>
-            )} */}
 
 <View style={[styles.wrapper,  (!usingPaddingBottom || FooterComponent) && {paddingBottom:0}, !usingPaddingTop && {paddingTop: 0}, { padding: noPadding ? 0 : 16 }]}>
                     {children}

@@ -64,8 +64,10 @@ interface Spacing {
     black: string,
     white: string,
     positive: string,
+    positiveSecondary: string,
     negative: string,
-    caption: string
+    caption: string,
+    divider: string
   }
 
   interface FontSize {
@@ -149,8 +151,10 @@ interface Spacing {
     black: "#000000",
     white: "#FFFFFF",
     positive: '#4FAC33',
+    positiveSecondary: '#E1FCED',
     negative: '#F64C4C',
-    caption: '#8E8E8E'
+    caption: '#8E8E8E',
+    divider: '#52555A'
   }
 
   export const FONTSIZE: FontSize = {
