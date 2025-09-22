@@ -3,8 +3,8 @@ import { StyleSheet, Text, TouchableOpacityProps } from 'react-native';
 import { COLORS, FONTSIZE } from '../../assets/theme';
 
 interface CaptionProps extends TouchableOpacityProps {
-    text: string
-    color?: string
+    text: string | undefined;
+    color?: string;
     fontSize?: number;
     align?: 'left' | 'right' | 'center';
     numberOfLines?: number;

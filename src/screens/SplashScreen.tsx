@@ -4,9 +4,9 @@ import { StyleSheet } from "react-native";
 const SplashScreen = () => {
 
   return (
-    // <>
+    <>
        <LottieView source={require('../assets/animations/loading.json')} autoPlay loop style={styles.container} />
-    // </>
+    </>
   )
 }
 

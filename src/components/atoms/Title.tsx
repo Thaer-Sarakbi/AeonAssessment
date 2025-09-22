@@ -3,7 +3,7 @@ import { StyleSheet, Text, TouchableOpacityProps } from 'react-native';
 import { COLORS, FONTSIZE } from '../../assets/theme';
 
 interface TitleProps extends TouchableOpacityProps {
-    text: string
+    text: string | undefined
     color?: string
     fontSize?: number;
     align?: 'left' | 'right' | 'center';

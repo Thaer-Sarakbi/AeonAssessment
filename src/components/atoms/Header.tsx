@@ -2,6 +2,7 @@ import React from 'react'
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import Title from './Title'
 import { useNavigation } from '@react-navigation/native';
+import { SPACING } from '../../assets/theme';
 
 const Header = () => {
   const navigation = useNavigation();
@@ -25,7 +26,8 @@ const styles = StyleSheet.create({
     container: {
       flexDirection: 'row',
       justifyContent: 'space-between',
-      alignItems: 'center'
+      alignItems: 'center',
+      paddingHorizontal: SPACING.space_12
     }
 });
 
