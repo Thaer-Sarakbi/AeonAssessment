@@ -1,4 +1,4 @@
-import { StyleSheet, TouchableOpacity, View } from 'react-native'
+import { Image, StyleSheet, TouchableOpacity, View } from 'react-native'
 import Caption from '../../components/atoms/Caption'
 import Divider from '../../components/atoms/Divider'
 import Title from '../../components/atoms/Title'
@@ -11,6 +11,9 @@ import Spacer from '../../components/atoms/Spacer'
 import { useEffect, useState } from 'react'
 import { shadows } from '../../styles/shadows'
 import PlaceHolder from '../../components/atoms/PlaceHolder'
+import { generatePDF } from 'react-native-html-to-pdf';
+import Share from 'react-native-share';
+import RNFS from 'react-native-fs';
 
 const TransactionDetails = () => {
   const [isLoading, setIsLoading] = useState(true);
@@ -18,7 +21,7 @@ const TransactionDetails = () => {
   useEffect(() => {
     setTimeout(() => {
       setIsLoading(false);
-    }, 3000); 
+    }, 2500); 
   }, []);
 
   const route = useRoute();
@@ -36,83 +39,47 @@ const TransactionDetails = () => {
     hour12: false,
   })}`;
 
-  // async function generatePDF(transfer) {
-  //   const html = `
-  //     <h1>Transfer Details</h1>
-  //     <p>Ref ID: ${transfer.refId}</p>
-  //     <p>Date: ${transfer.transferDate}</p>
-  //     <p>Recipient: ${transfer.recipientName}</p>
-  //     <p>Transfer Name: ${transfer.transferName}</p>
-  //     <p>Amount: ${transfer.amount}</p>
-  //   `;
-  
-  //   const file = await RNHTMLtoPDF.convert({
-  //     html,
-  //     fileName: `transfer_${transfer.refId}`,
-  //     base64: false, // set true if you need base64
-  //   });
-  
-  //   return file.filePath; // Local path to the generated PDF
-  // }
+  const sharePdf = async (filePath: string, fileName: string) => {
+    const path = `${RNFS.CachesDirectoryPath}/${fileName}`;
+    await RNFS.copyFile(filePath, path);
 
-  // async function shareTransferPDF(filePath) {
-  //   await Share.open({
-  //     title: 'Share Transfer Details',
-  //     url: `file://${filePath}`,   // 👈 must use file:// scheme
-  //     type: 'application/pdf',
-  //     failOnCancel: false,
-  //   });
-  // }
+    try {
+      const shareOptions = {
+        title: 'Share PDF',
+        url: `file://${path}`, 
+        type: 'application/pdf',
+        filename: fileName,
+      };
 
-  // async function handleShare(transfer) {
-  //   const pdfPath = await generatePDF(transfer);
-  //   await shareTransferPDF(pdfPath);
-  // }
+      console.log(shareOptions)
+      await Share.open(shareOptions);
+    } catch (error) {
+      console.error('Error sharing PDF:', error);
+    }
+  };
 
-  // const generatePDF = async () => {
-  //   try {
-  //     // Capture the view as image
-  //     const uri = await viewShotRef.current.capture();
-      
-  //     // Create PDF document
-  //     const pdfDoc = PDFDocument.create();
-      
-  //     // Add page with the captured image
-  //     const page = PDFPage.create()
-  //       .setMediaBox(200, 300)
-  //       .drawImage(uri, {
-  //         x: 5,
-  //         y: 5,
-  //         width: 190,
-  //         height: 290,
-  //       });
-      
-  //     pdfDoc.addPage(page);
-      
-  //     const pdfPath = await pdfDoc.write(`${PDFDocument.DocumentsDirectory}/transfer_${data.refId}.pdf`);
-      
-  //     // Share the PDF
-  //     await Share.open({
-  //       title: 'Share Transfer Receipt',
-  //       url: `file://${pdfPath}`,
-  //       type: 'application/pdf',
-  //     });
-      
-  //   } catch (error) {
-  //     Alert.alert('Error', error.message);
-  //   }
-  // };
+      const html = `
+      <h1>Transfer Details</h1>
+      <p>Ref ID: ${transaction?.refId}</p>
+      <p>Date: ${transaction?.transferDate}</p>
+      <p>Recipient: ${transaction?.recipientName}</p>
+      <p>Transfer Name: ${transaction?.transferName}</p>
+      <p>Amount: ${transaction?.amount}</p>
+    `;
 
   const createPdf = async () => {
     let options = {
-      html: '<h1>PDF TEST</h1>',
-      fileName: 'test',
+      html,
+      fileName: 'Transaction',
       directory: 'Documents',
     };
 
     let results = await generatePDF(options);
-    console.log(results);
+    console.log(results.filePath);
+
+    sharePdf(results.filePath, 'test.pdf');
   };
+
 
   return (
     <>
@@ -125,7 +92,7 @@ const TransactionDetails = () => {
            <Spacer height={SPACING.space_20} />
            <Title text={transaction?.amount.toString()} align='center' fontSize={20} />
            <Spacer height={SPACING.space_20} />
-           <View style={{ backgroundColor: transaction?.transferName === 'Refund' ? COLORS.negativeSecondary : COLORS.positiveSecondary, alignSelf: 'center', paddingVertical: SPACING.space_4, paddingHorizontal: SPACING.space_8, borderRadius: 40 }}>
+           <View style={[styles.status, {backgroundColor: transaction?.transferName === 'Refund' ? COLORS.negativeSecondary : COLORS.positiveSecondary}]}>
              <Caption text={transaction?.transferName} color={transaction?.transferName === 'Refund' ? COLORS.negative : COLORS.positive} />
           </View>
           <Spacer height={SPACING.space_10} />
@@ -146,7 +113,9 @@ const TransactionDetails = () => {
     </Container>
     <View style={styles.footer}>
       <TouchableOpacity style={[styles.button, shadows.cards]} onPress={createPdf}>
-        <Caption text='Share' align='center' fontSize={20}/>
+        <Image source={require('../../assets/icons/share.png')} style={styles.icon} />
+        <Spacer width={SPACING.space_8} />
+        <Caption text='Share' align='center' fontSize={20} color={COLORS.black}/>
       </TouchableOpacity>
     </View>
     </>
@@ -155,7 +124,9 @@ const TransactionDetails = () => {
 
 const styles = StyleSheet.create({
   footer: {  width: '100%', height: 100, position: 'absolute', bottom: 0, paddingHorizontal: SPACING.space_12 },
-  button: { backgroundColor: COLORS.white, padding: SPACING.space_8, borderRadius: 8 }
+  button: { backgroundColor: COLORS.white, padding: SPACING.space_12, borderRadius: 8, flexDirection: 'row', justifyContent: 'center', alignItems: 'center' },
+  status: { alignSelf: 'center', paddingVertical: SPACING.space_4, paddingHorizontal: SPACING.space_8, borderRadius: 40 },
+  icon: { width: 20, height: 20 }
 });
 
 export default TransactionDetails

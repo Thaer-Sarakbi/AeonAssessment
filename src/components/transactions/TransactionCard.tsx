@@ -1,5 +1,4 @@
-import { StyleSheet, TouchableOpacity, View } from 'react-native'
-import Icon from "react-native-vector-icons/Ionicons";
+import { StyleSheet, TouchableOpacity, View, Image } from 'react-native'
 import { COLORS, SPACING } from '../../assets/theme';
 import { shadows } from '../../styles/shadows';
 import { Transaction } from '../../stores/types';
@@ -10,13 +9,17 @@ import DateCard from './DateCard';
 import Number from '../atoms/Number';
 import { useNavigation } from '@react-navigation/native';
 import { ScreenName } from '../../routes/ScreenName';
+import { StackNavigationProp } from '@react-navigation/stack';
+import { RootStackParamList } from '../../routes/types';
 
 interface Props {
   item: Transaction
 }
 
+type NavigationProps = StackNavigationProp<RootStackParamList>;
+
 const TransactionCard = ({item}: Props) => {
-  const navigation = useNavigation();
+  const navigation = useNavigation<NavigationProps>();
   const { refId, transferDate, recipientName, transferName, amount } = item;
 
   return (
@@ -36,7 +39,7 @@ const TransactionCard = ({item}: Props) => {
         </View>
       </View>
       <View style={styles.right}>
-        <Icon name="arrow-right" color={'black'}/>
+        <Image source={require('../../assets/icons/right-chevron.png')} style={styles.icon} />
         <Spacer height={20} />
         <Number text={amount} color={String(amount).includes('-') ? COLORS.negative : COLORS.positive } />
       </View>
@@ -56,7 +59,8 @@ const styles = StyleSheet.create({
       borderRadius: 8
     },
     left: { flexDirection: 'row', justifyContent: 'center', alignItems: 'center' },
-    right: { alignItems: 'flex-end' }
+    right: { alignItems: 'flex-end' },
+    icon: { width: 10, height: 10 }
 });
 
 export default TransactionCard

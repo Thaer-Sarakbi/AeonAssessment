@@ -8,12 +8,12 @@ const Divider = () => {
 
 const styles = StyleSheet.create({
   divider: {
-    borderBottomColor: COLORS.divider, // Change color as per your preference
-    borderBottomWidth: 0.5, // Change thickness as per your preference
+    borderBottomColor: COLORS.divider,
+    borderBottomWidth: 0.5,
     marginVertical: SPACING.space_8,
     width: '100%',
     marginBottom: SPACING.space_8,
-    margin: 8,
+    margin: SPACING.space_8,
   },
 });
 

@@ -1,5 +1,5 @@
 import React from 'react'
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { Image, StyleSheet, TouchableOpacity, View } from 'react-native'
 import Title from './Title'
 import { useNavigation } from '@react-navigation/native';
 import { SPACING } from '../../assets/theme';
@@ -14,7 +14,7 @@ const Header = () => {
   return (
     <View style={styles.container}>
       <TouchableOpacity onPress={navigationBack}>
-       <Text>+</Text>
+       <Image source={require('../../assets/icons/arrow.png')} style={styles.icon} />
       </TouchableOpacity>
       <Title text='Transaction Details' />
       <View />
@@ -28,7 +28,8 @@ const styles = StyleSheet.create({
       justifyContent: 'space-between',
       alignItems: 'center',
       paddingHorizontal: SPACING.space_12
-    }
+    },
+    icon: { width: 16, height: 16 }
 });
 
 export default Header
